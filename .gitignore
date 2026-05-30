@@ -1,0 +1,24 @@
+# ── Secrets — NEVER COMMIT ───────────────────────────────
+.env
+.env.*
+*.env
+vault*
+*token*
+*secret*
+*credential*
+*.pem
+*.key
+managed_bots.json
+
+# ── Runtime / operational state ──────────────────────────
+logs/
+*.log
+handoff/
+TASK_QUEUE.md
+*.db
+__pycache__/
+*.pyc
+
+# ── Local / vendor ───────────────────────────────────────
+node_modules/
+.DS_Store
