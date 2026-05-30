@@ -6,22 +6,30 @@ A tiny bearer-gated HTTP API the FULL MainBrain calls over the private mesh when
 needs hardware:  POST /run · POST /files/read · POST /files/write · GET /screenshot
 
 Config (env):
-  TOOL_API_SECRET   shared bearer token (REQUIRED — refuses to start without it)
-  TOOL_BIND         bind address  (default 0.0.0.0 — set to your mesh IP in prod)
+  TOOL_API_SECRET   shared bearer token (REQUIRED — refuses to start without a strong one)
+  TOOL_BIND         bind address  (default 127.0.0.1 — opt in to your mesh IP explicitly)
   TOOL_PORT         port          (default 7070)
 
-SECURITY: bind to your PRIVATE mesh interface only, never a public address. Only the
-MainBrain should hold the secret. Every call is logged.
+SECURITY: this exposes remote shell execution. Bind to loopback or your PRIVATE mesh
+interface only — NEVER a public address. Only the MainBrain should hold the secret, and
+it must be long & random. Every call is logged.
 """
 import json, os, subprocess, sys
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 SECRET = os.environ.get("TOOL_API_SECRET", "")
-BIND = os.environ.get("TOOL_BIND", "0.0.0.0")
+BIND = os.environ.get("TOOL_BIND", "127.0.0.1")
 PORT = int(os.environ.get("TOOL_PORT", "7070"))
 
 if not SECRET:
     sys.exit("✗ refusing to start: set TOOL_API_SECRET")
+if len(SECRET) < 16:
+    sys.exit("✗ refusing to start: TOOL_API_SECRET too weak — use ≥16 random chars "
+             "(e.g.  export TOOL_API_SECRET=$(openssl rand -hex 24) )")
+if BIND not in ("127.0.0.1", "localhost", "::1"):
+    sys.stderr.write(
+        f"⚠ binding to {BIND} — this serves REMOTE SHELL EXECUTION on that interface.\n"
+        f"⚠ Only do this on a PRIVATE mesh (e.g. Tailscale). Never a public address.\n")
 
 
 class Hook(BaseHTTPRequestHandler):

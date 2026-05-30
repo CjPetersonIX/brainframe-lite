@@ -83,11 +83,14 @@ printf '\033[92mBRAINFRAME OS LITE installed.\033[0m\n'
 cat <<EOF
 
 Next steps:
-  1. Edit  $TARGET/vault.env   (set TOOL_API_SECRET and bind IP)
-  2. Start the hook:
-        TOOL_API_SECRET=... brainframe-hook            # binds 0.0.0.0:7070
+  1. Edit  $TARGET/vault.env   (set a strong TOOL_API_SECRET + your mesh IP)
+        export TOOL_API_SECRET=\$(openssl rand -hex 24)   # ≥16 chars required
+  2. Start the hook (defaults to loopback 127.0.0.1:7070 — safe):
+        TOOL_API_SECRET=... brainframe-hook
      (run it under launchd/systemd so it survives reboot)
-  3. Bind it to your PRIVATE mesh interface only — never a public address.
+  3. To let the MainBrain reach it, bind to your PRIVATE mesh IP only:
+        TOOL_BIND=<your-mesh-ip> TOOL_API_SECRET=... brainframe-hook
+     NEVER bind to a public address — this serves remote shell execution.
   4. From the FULL MainBrain, call /run /files/read /files/write /screenshot.
 
 Read  $TARGET/ARCHITECTURE.md  and  $TARGET/docs/TOOL_ARM_HOOK.md
