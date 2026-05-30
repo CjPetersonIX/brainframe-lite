@@ -55,7 +55,9 @@ keychain, no USB. A small always-on local machine fills exactly those gaps:
 
 ## LITE mode (hardware-bounded discipline)
 
-LITE assumes a *small* machine, so it self-limits:
+LITE is built for **small, older, or low-spec machines** — 8 GB+ is comfortable, but it
+runs on **as low as 4 GB RAM** (expect some lag under load). You don't need a big box; an
+old 4 GB laptop makes a perfectly good Tool Node. It self-limits to stay responsive:
 
 - One workload in memory at a time.
 - Per-process memory cap.

@@ -12,6 +12,21 @@ A small, always-on local machine that gives the headless cloud MainBrain a body:
 | Device bridge (USB / LAN) | Physical ports to phones and peripherals. |
 | FIDO / MFA taps | A real button press a remote box can't perform. |
 
+## Hardware requirements
+
+LITE is deliberately built for **modest, older, or low-spec machines** — that's the whole
+point of the edition.
+
+| Tier | RAM | Experience |
+|---|---|---|
+| Comfortable | 8 GB+ | Smooth. Headroom for a browser session + a small local model. |
+| Workable | 4–8 GB | Fine for the Tool-Arm Hook + GUI automation. |
+| **Floor** | **as low as 4 GB** | **Runs — but expect some lag.** Keep one workload in memory, lean on the MainBrain swarm for cognition. |
+
+You do **not** need a 16 GB machine. If all you're running is the Tool-Arm Hook and light
+GUI automation, an old 4 GB laptop is a perfectly valid Tool Node — it'll just feel slower
+under load. The LITE-mode rules below exist precisely so a small machine stays responsive.
+
 ## LITE-mode rules
 
 Because the node is small, it self-limits to stay responsive:
