@@ -1,6 +1,6 @@
 # Tool-Arm Hook — the one-way delegation API
 
-A tiny HTTP service on the Tool Node that the the FULL node calls over the private
+A tiny HTTP service on the Tool Node that the FULL node calls over the private
 mesh when it needs hardware. **One-way**: FULL → LITE. LITE reports results back up the
 normal command/approval chain, not by reaching into FULL.
 
