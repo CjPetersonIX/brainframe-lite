@@ -13,7 +13,7 @@
 ## Install (one line)
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/The9thRealm/brainframe-lite/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/CjPetersonIX/brainframe-lite/main/install.sh | bash
 ```
 
 # BRAINFRAME OS LITE: Standalone Lean Agentic Framework
@@ -183,7 +183,7 @@ docs/
 
 ## Author & Professional Inquiries
 
-**BRAINFRAME OS LITE** is conceptualized, designed, and maintained by **The9thRealm**.
+**BRAINFRAME OS LITE** is conceptualized, designed, and maintained by **CjPetersonIX**.
 
 If you are a technology leader, recruiter, or organization looking for expertise in autonomous multi-agent orchestration pipelines, custom hardware-edge API middleware, or resilient decentralized AI architectures, feel free to review my verified portfolio or connect directly:
 
