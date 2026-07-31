@@ -2,7 +2,7 @@
 #
 # BRAINFRAME OS — LITE · one-line installer
 #
-#   curl -fsSL https://raw.githubusercontent.com/The9thRealm/brainframe-lite/main/install.sh | bash
+#   curl -fsSL https://raw.githubusercontent.com/CjPetersonIX/brainframe-lite/main/install.sh | bash
 #
 # Scaffolds your own LITE edge Tool Node: framework tree, vault, and the Tool-Arm
 # Hook server (desktop_api). Non-interactive and idempotent — safe to re-run.
@@ -10,7 +10,7 @@
 set -euo pipefail
 
 EDITION="LITE"
-REPO_URL="${BRAINFRAME_REPO:-https://github.com/The9thRealm/brainframe-lite.git}"
+REPO_URL="${BRAINFRAME_REPO:-https://github.com/CjPetersonIX/brainframe-lite.git}"
 TARGET="${BRAINFRAME_HOME:-$HOME/brainframe-lite}"
 BIN_DIR="${BRAINFRAME_BIN:-$HOME/.local/bin}"
 

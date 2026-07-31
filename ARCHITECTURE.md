@@ -3,14 +3,14 @@
 > Public reference edition. Addresses/handles are `<PLACEHOLDERS>`.
 
 The Tool Node is one node in the dual-OS mesh. It does **not** run the Council or the
-swarm — those live on the FULL MainBrain. LITE owns everything that needs a real
+swarm — those live on the FULL node. LITE owns everything that needs a real
 machine with a screen, a browser session, a keychain, and physical ports.
 
 ```
          ═══════════ BRAINFRAME OS — DUAL-OS FABRIC (private mesh) ═══════════
          │
-         ├─ ◆ NODE: arm-01  "MainBrain" (FULL)  — cloud · Council + swarm
-         │       (see the brainframe-full repo)
+         ├─ ◆ NODE: FULL  — any cloud VM or large-RAM machine · Council + swarm
+         │       (see "Relationship to FULL" below)
          │
          └─ ◆ NODE: Tool Node (LITE)  — small local machine · mesh <TOOLNODE_MESH_IP>
              │
@@ -28,7 +28,7 @@ machine with a screen, a browser session, a keychain, and physical ports.
              │   └─ RAM-threshold cleanup before any new spawn
              │
              └─ TOOL-ARM HOOK — desktop_api :<TOOL_PORT>
-                   ▲ one-way: MainBrain (FULL) → Tool Node (LITE)
+                   ▲ one-way: the FULL node → Tool Node (LITE)
                    /run · /files/read · /files/write · /screenshot
 ```
 
