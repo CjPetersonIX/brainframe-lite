@@ -1,48 +1,60 @@
-# BRAINFRAME OS LITE — Tool Node Architecture
+# BRAINFRAME LITE — architecture
 
-> Public reference edition. Addresses/handles are `<PLACEHOLDERS>`.
+Public wrapper edition. Not BrainFrame OS. Not Helix.
 
-The Tool Node is one node in the dual-OS mesh. It does **not** run the Council or the
-swarm — those live on the FULL MainBrain. LITE owns everything that needs a real
-machine with a screen, a browser session, a keychain, and physical ports.
+## Layering
 
-```
-         ═══════════ BRAINFRAME OS — DUAL-OS FABRIC (private mesh) ═══════════
-         │
-         ├─ ◆ NODE: arm-01  "MainBrain" (FULL)  — cloud · Council + swarm
-         │       (see the brainframe-full repo)
-         │
-         └─ ◆ NODE: Tool Node (LITE)  — small local machine · mesh <TOOLNODE_MESH_IP>
-             │
-             ├─ [CAPABILITIES]
-             │   ├─ GUI / desktop automation
-             │   ├─ Browser control — CDP, interactive OAuth, MFA
-             │   ├─ OS keychain — secure local credential store
-             │   ├─ Device bridge — USB / local-network to phones & peripherals
-             │   └─ FIDO / MFA physical taps
-             │
-             ├─ [LITE MODE RULES]
-             │   ├─ one workload in memory at a time
-             │   ├─ per-process memory cap
-             │   ├─ one local model loaded at a time
-             │   └─ RAM-threshold cleanup before any new spawn
-             │
-             └─ TOOL-ARM HOOK — desktop_api :<TOOL_PORT>
-                   ▲ one-way: MainBrain (FULL) → Tool Node (LITE)
-                   /run · /files/read · /files/write · /screenshot
+```text
+BrainFrame OS : Helix     (private → sanitized public later)
+        │
+        ├─ LIVE + LEGACY strands, fleet map, MasterQ, cone of brains
+        └─ this repo is not that
+
+BRAINFRAME LITE           (this repo)
+        │
+        single Brain 🧠
+        VP1–VP4 + Agent Zero + PicoClaw
+        optional sync ↔ other brains on your network
 ```
 
-## Relationship to FULL
+## Hierarchy on one brain
 
-- **Peer, not subordinate.** LITE runs its own agent loop and its own handoffs.
-- **One-way hook.** FULL initiates calls to LITE when it needs hardware. LITE does not
-  reach *into* FULL the same way; it reports up through the normal command/approval
-  chain.
-- **Independent failure domains.** If the small machine is down, FULL keeps running
-  (it just loses hardware reach until the node returns).
+```text
+R0
+ ├─ VP1 Claude Code     primary local CLI
+ ├─ VP2 Codex           code / repo CLI
+ ├─ VP3 AGY             Antigravity CLI
+ ├─ VP4 Grok Build      Grok CLI
+ ├─ OM  Agent Zero      sequential ops manager + RAM clamp
+ └─ OPs PicoClaw        single-threaded grunt runtime
+```
 
-## Where LITE fits the command chain
+Telegram bots per seat are **optional**. They are not required for the wrapper to run.
 
-LITE is invoked **only for hardware/GUI** steps of a task the Council already owns.
-A typical flow: FULL plans a task → needs a browser OAuth → POSTs `/run` (or a browser
-action) to the Tool Node → LITE performs it and returns the result → FULL continues.
+## What LITE refuses to be
+
+- The Frontal Lobe / OmniSecretary / MasterQ authority
+- A parallel NemoClaw / OpenClaw swarm host
+- A second copy of the LIVE encyclopedia
+- `brainframe-full` (that public repo is also a skeleton, not the fleet OS)
+
+## Mesh (optional)
+
+```text
+[ Brain A — LITE ] ↔ git/mesh ↔ [ Brain B — LITE or larger node ]
+        │
+        Tool-Arm hook (bearer, private bind only)
+        POST /run  /files/read  /files/write  GET /screenshot
+```
+
+One-way by default: a larger node may call this box for hardware. This box reports state through handoff + pulse, not by reaching into another brain's vault.
+
+## CKPT (when synced)
+
+Use the public handoff + qpulse skills:
+
+```
+<NODE-ID> CKPT <MASTER>.<LOCAL>
+```
+
+One shared epoch on the network. One millidigit **per brain**, not per VP. The millidigit is a counter, not a decimal. State commits go to `main`.
