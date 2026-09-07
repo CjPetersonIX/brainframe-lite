@@ -1,20 +1,38 @@
-# BRAINFRAME LITE
+<p align="center">
+  <img src="assets/banner.svg" alt="BRAINFRAME LITE — under 8GB single-brain wrapper" width="100%">
+</p>
 
-```
-BRAINFRAME LITE
-agentic wrapper  ·  single-brain sub-OS  ·  under 8 GB
-```
+<p align="center">
+  <img alt="wrapper" src="https://img.shields.io/badge/edition-LITE_wrapper-6ee7b7?style=for-the-badge&labelColor=070707">
+  <img alt="ram" src="https://img.shields.io/badge/RAM-under_8GB-2dd4bf?style=for-the-badge&labelColor=070707">
+  <img alt="not os" src="https://img.shields.io/badge/not-the_fleet_OS-070707?style=for-the-badge">
+</p>
 
-**This is not BrainFrame OS.**
+<p align="center"><b>Agentic wrapper sub-OS for <em>one</em> brain. Not BrainFrame OS. Not Helix.</b></p>
 
-This repo is an **agentic wrapper sub-OS** for **one brain** with **under 8 GB RAM**. It installs a local Senate + **sequential** operations stack, and it can **sync** with other brains on your network.
-
-The complete **BrainFrame Agentic Operating System** stays private until **BrainFrame OS: Helix** is complete. A sanitized public edition of the full OS will ship then. Do not treat this repo or `brainframe-full` as that OS.
+The complete operating system stays private until <b>BrainFrame OS: Helix</b> is finished. This repo is only the <b>under-8 GB single-brain install</b>.
 
 | Wrapper | RAM | Operations |
 |---|---|---|
-| **brainframe-lite** (this repo) | **under 8 GB** | OM Agent Zero + OPs PicoClaw (sequential) |
-| [brainframe-full](https://github.com/CjPetersonIX/brainframe-full) | **8 GB+** | OM NemoClaw + OPs OpenClaw (parallel) |
+| <b>LITE</b> (this repo) | under 8 GB | Agent Zero + PicoClaw · sequential |
+| [FULL](https://github.com/CjPetersonIX/brainframe-full) | 8 GB+ | NemoClaw + OpenClaw · parallel |
+
+## Hierarchy
+
+```mermaid
+flowchart TB
+  R0["R0 · owner / kill switch"]
+  subgraph senate["Senate — pick the seats you subscribe to"]
+    VP1["VP1 Claude Code"]
+    VP2["VP2 Codex"]
+    VP3["VP3 AGY"]
+    VP4["VP4 Grok Build"]
+  end
+  OM["OM Agent Zero\nsequential · RAM clamp"]
+  OPS["OPs PicoClaw\none grunt at a time"]
+  R0 --> senate
+  senate --> OM --> OPS
+```
 
 ## Install
 
@@ -22,45 +40,12 @@ The complete **BrainFrame Agentic Operating System** stays private until **Brain
 curl -fsSL https://raw.githubusercontent.com/CjPetersonIX/brainframe-lite/main/install.sh | bash
 ```
 
-Override: `BRAINFRAME_HOME=~/my-brain BRAINFRAME_REPO=https://github.com/CjPetersonIX/brainframe-lite.git`.
+## CKPT
 
-## What you get (one brain, under 8 GB)
-
-```text
-R0  (you — kill switch)
-  ├─ VP1  Claude Code
-  ├─ VP2  Codex
-  ├─ VP3  Antigravity (agy)
-  ├─ VP4  Grok Build
-  ├─ OM   Agent Zero     sequential ops manager, RAM clamp
-  └─ OPs  PicoClaw       one-grunt-at-a-time runtime
-```
-
-Same VPs as FULL. The split is **how labor runs**. Parallel NemoClaw / OpenClaw, Frontal Lobe, and Helix law are **not** in this package.
-
-## How a single brain works
-
-- Wire the VP seats you subscribe to. Unused seats stay empty.
-- Agent Zero: one vertical in memory, RAM clamp.
-- PicoClaw: one step at a time. That is how sub-8 GB boxes survive.
-- CKPT via companion skills: `<NODE-ID> CKPT <MASTER>.<LOCAL>`.
-
-## Sync
-
-Shared git for queue + pulses (`main`). Optional Tool-Arm hook for GUI. Same epoch, per-brain millidigit. Standalone is fine.
-
-## Hardware
-
-- Floor ~2 GB. Ceiling for this edition: **just under 8 GB**.
-- At 8 GB or more, install FULL instead.
-- One workload in RAM. Cleanup before spawn. Grep, do not slurp.
+`<NODE-ID> CKPT <MASTER>.<LOCAL>` — counter, not a float. Skills: [handoff](https://github.com/CjPetersonIX/brainframe-handoff) · [qpulse](https://github.com/CjPetersonIX/brainframe-qpulse).
 
 ## Docs
 
-[`ARCHITECTURE.md`](ARCHITECTURE.md) · [`CLAUDE.md`](CLAUDE.md) · [`docs/TOOL_NODE.md`](docs/TOOL_NODE.md) · [`docs/TOOL_ARM_HOOK.md`](docs/TOOL_ARM_HOOK.md)
+[ARCHITECTURE.md](ARCHITECTURE.md) · [CLAUDE.md](CLAUDE.md) · [docs/TOOL_NODE.md](docs/TOOL_NODE.md) · [docs/TOOL_ARM_HOOK.md](docs/TOOL_ARM_HOOK.md)
 
-Skills: [handoff](https://github.com/CjPetersonIX/brainframe-handoff) · [qpulse](https://github.com/CjPetersonIX/brainframe-qpulse)
-
-Placeholders only. Vault stays local and git-ignored.
-
-Maintained by [The9thRealm](https://github.com/The9thRealm) / [CjPetersonIX](https://github.com/CjPetersonIX).
+Secrets stay local and git-ignored.
