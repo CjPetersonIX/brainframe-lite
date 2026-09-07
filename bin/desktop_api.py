@@ -1,18 +1,8 @@
 #!/usr/bin/env python3
 """
-Tool-Arm Hook — BRAINFRAME OS LITE edge server (reference implementation).
-
-A tiny bearer-gated HTTP API the FULL MainBrain calls over the private mesh when it
-needs hardware:  POST /run · POST /files/read · POST /files/write · GET /screenshot
-
-Config (env):
-  TOOL_API_SECRET   shared bearer token (REQUIRED — refuses to start without a strong one)
-  TOOL_BIND         bind address  (default 127.0.0.1 — opt in to your mesh IP explicitly)
-  TOOL_PORT         port          (default 7070)
-
-SECURITY: this exposes remote shell execution. Bind to loopback or your PRIVATE mesh
-interface only — NEVER a public address. Only the MainBrain should hold the secret, and
-it must be long & random. Every call is logged.
+Tool-Arm Hook — LITE wrapper helper.
+Bearer-gated HTTP for GUI/files on THIS box. Not BrainFrame OS.
+A larger node on your mesh may call it. Bind private only.
 """
 import json, os, subprocess, sys
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -22,20 +12,13 @@ BIND = os.environ.get("TOOL_BIND", "127.0.0.1")
 PORT = int(os.environ.get("TOOL_PORT", "7070"))
 
 if not SECRET:
-    sys.exit("✗ refusing to start: set TOOL_API_SECRET")
+    sys.exit("set TOOL_API_SECRET")
 if len(SECRET) < 16:
-    sys.exit("✗ refusing to start: TOOL_API_SECRET too weak — use ≥16 random chars "
-             "(e.g.  export TOOL_API_SECRET=$(openssl rand -hex 24) )")
-if BIND not in ("127.0.0.1", "localhost", "::1"):
-    sys.stderr.write(
-        f"⚠ binding to {BIND} — this serves REMOTE SHELL EXECUTION on that interface.\n"
-        f"⚠ Only do this on a PRIVATE mesh (e.g. Tailscale). Never a public address.\n")
-
+    sys.exit("TOOL_API_SECRET too weak — 16+ chars")
 
 class Hook(BaseHTTPRequestHandler):
     def _auth(self):
         return self.headers.get("Authorization", "") == f"Bearer {SECRET}"
-
     def _send(self, code, payload):
         body = json.dumps(payload).encode()
         self.send_response(code)
@@ -43,32 +26,26 @@ class Hook(BaseHTTPRequestHandler):
         self.send_header("Content-Length", str(len(body)))
         self.end_headers()
         self.wfile.write(body)
-
     def _body(self):
         n = int(self.headers.get("Content-Length", 0) or 0)
         return json.loads(self.rfile.read(n) or b"{}")
-
     def log_message(self, fmt, *args):
         sys.stderr.write("[hook] " + (fmt % args) + "\n")
-
     def do_GET(self):
         if not self._auth():
             return self._send(401, {"error": "unauthorized"})
         if self.path == "/screenshot":
             out = "/tmp/brainframe_shot.png"
-            # platform-specific; macOS shown. Swap for your OS.
             rc = subprocess.call(["screencapture", "-x", out]) if sys.platform == "darwin" else 1
-            return self._send(200 if rc == 0 else 501,
-                              {"ok": rc == 0, "path": out if rc == 0 else None})
+            return self._send(200 if rc == 0 else 501, {"ok": rc == 0, "path": out if rc == 0 else None})
         self._send(404, {"error": "not found"})
-
     def do_POST(self):
         if not self._auth():
             return self._send(401, {"error": "unauthorized"})
         try:
             b = self._body()
         except Exception as e:
-            return self._send(400, {"error": f"bad json: {e}"})
+            return self._send(400, {"error": str(e)})
         if self.path == "/run":
             r = subprocess.run(b.get("cmd", ""), shell=True, capture_output=True, text=True, timeout=120)
             return self._send(200, {"code": r.returncode, "stdout": r.stdout, "stderr": r.stderr})
@@ -85,7 +62,6 @@ class Hook(BaseHTTPRequestHandler):
                 return self._send(400, {"error": str(e)})
         self._send(404, {"error": "not found"})
 
-
 if __name__ == "__main__":
-    print(f"Tool-Arm Hook on http://{BIND}:{PORT}  (bearer-gated)")
+    print(f"LITE hook http://{BIND}:{PORT}")
     ThreadingHTTPServer((BIND, PORT), Hook).serve_forever()
